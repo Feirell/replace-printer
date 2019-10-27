@@ -1,0 +1,17 @@
+{
+  "name": "replace-printer",
+  "version": "0.0.1",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build-readme": "ifim README.md"
+  },
+  "repository": "https://github.com/Feirell/replace-printer.git",
+  "author": "Florian Völker <Neirolf2030@web.de>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^12.0.7",
+    "insert-filecontent-into-markdown": "^1.0.3",
+    "typescript": "^3.5.1"
+  }
+}
