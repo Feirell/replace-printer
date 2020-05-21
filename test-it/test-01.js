@@ -15,14 +15,12 @@ setTimeout(() => {
 
 const intervalId = setInterval(() => {
     const remainingTime = timespan - Date.now() + starttime;
-    printer.replacePrint('Some Text\nwhich you will replace, in ' + remainingTime + 'ms');
+    printer.replacePrint('This is some replaceable Text\n\twhich will be replaced in ' + remainingTime + 'ms');
     if (remainingTime <= 0) {
         clearInterval(intervalId);
-        printer.replacePrint('Whoos and the text was removed.');
+        printer.replacePrint('Whoosh and the text was removed.');
+        // once you are done you can call
         printer.stop();
     }
 }, 16);
 
-// once you are done you can call
-
-print.stop();
