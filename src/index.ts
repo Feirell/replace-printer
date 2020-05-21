@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import * as TTY from 'tty';
 
 const countChars = (char: string, string: string) => {
@@ -16,6 +17,16 @@ const stopped = Symbol('stopped');
 const states = [initialized, running, stopped];
 
 type TTYWriteStream = TTY.WriteStream & { moveCursor: (dx: number, dy: number) => undefined };
+
+const availableConsoleMethods = [
+    'log', 'debug', 'info', 'trace', 'warn', 'error',// level
+    'dir', 'count', 'table', 'assert', 'dirxml', 'countReset', // special representation
+    'clear',
+    'group', 'groupCollapsed', // group
+    'time', 'timeEnd', 'timeLog' // time
+].filter(name => typeof (console as { [key: string]: any })[name] == 'function');
+
+console.log(availableConsoleMethods);
 
 export class ReplacePrinter {
     private logStack: { method: string, args: any[] }[] = [];
