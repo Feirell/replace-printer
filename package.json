@@ -1,8 +1,11 @@
 {
   "name": "replace-printer",
   "version": "1.0.0",
-  "main": "./lib/replace-printer.js",
-  "files": "lib",
+  "main": "lib/replace-printer.js",
+  "types": "lib/replace-printer.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc",
     "build-readme": "ifim README.md"
