@@ -88,7 +88,7 @@ export class ReplacePrinter {
             return;
         }
 
-        const replaceBuffer = removeProblematicCharacters(this.replaceStreamBuffer.buffer.slice(0, -1)); // removing the last linebreak
+        const replaceBuffer = removeProblematicCharacters(this.replaceStreamBuffer.buffer.slice(0, -1)) || this.lastReplaceMessage; // removing the last linebreak
         this.replaceStreamBuffer.buffer = '';
 
         const continuesBuffer = this.continuesStreamBuffer.buffer;
