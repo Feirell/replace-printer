@@ -1,26 +1,24 @@
-const { ReplacePrinter } = require('../');
+const {ReplacePrinter} = require('../');
 
-const printer = new ReplacePrinter();
+const {continuesConsole, replaceConsole} = new ReplacePrinter();
 
-// if you want to print something the ordinary way in the meantime you can just do so by using 
-
-printer.log('This is some event like print, which will scroll like always.', { withSome: 'object' });
+// if you want to print something the ordinary way in the meantime you can just do so by using
+continuesConsole.log('This is some event like print, which will scroll like always.', {withSome: 'object'});
 
 const timespan = 6000;
-const starttime = Date.now();
+const startTime = Date.now();
 
 setTimeout(() => {
-    printer.log('This is some event like print, which will scroll like always which appears after about ' + (timespan / 2) + 'ms');
+    continuesConsole.log('This is some event like print, which will scroll like always which appears after about %dms', Date.now() - startTime);
 }, timespan / 2);
 
 const intervalId = setInterval(() => {
-    const remainingTime = timespan - Date.now() + starttime;
-    printer.replacePrint('This is some replaceable Text\n\twhich will be replaced in ' + remainingTime + 'ms');
+    const remainingTime = timespan - Date.now() + startTime;
+    replaceConsole.log('This is some replaceable Text\n\twhich will be replaced in %dms', remainingTime);
+
     if (remainingTime <= 0) {
         clearInterval(intervalId);
-        printer.replacePrint('Whoosh and the text was removed.');
-        // once you are done you can call
-        printer.stop();
+        replaceConsole.log('Whoosh and the text was removed.');
     }
 }, 16);
 
