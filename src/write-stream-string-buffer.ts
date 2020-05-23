@@ -1,12 +1,23 @@
 import {Writable, WritableOptions} from "stream";
 
+const noop = () => {
+};
+
 export class WriteStreamStringBuffer extends Writable {
     public buffer = '';
     public getColorDepth?: () => any;
     public isTTY?: boolean;
 
-    constructor(backing: Writable, opt?: WritableOptions) {
+    constructor(
+        backing: Writable,
+        private readonly bufferChangeCallback = noop,
+        private readonly replaceOrAppendBuffer: 'replace' | 'append' = 'append',
+        opt?: WritableOptions
+    ) {
         super({...opt, decodeStrings: false});
+        if (replaceOrAppendBuffer != 'replace' && replaceOrAppendBuffer != 'append')
+            throw new Error('replaceOrAppendBuffer needs to be either "replace" or "append" but was ' + replaceOrAppendBuffer);
+
         this.setDefaultEncoding('utf8');
 
         // TODO WARNING: The values of .getColorDepth and .isTTY are pulled once and used static after that
@@ -34,8 +45,14 @@ export class WriteStreamStringBuffer extends Writable {
             return;
         }
 
-        this.buffer += chunk;
+        if (this.replaceOrAppendBuffer == 'append')
+            this.buffer += chunk;
+        else
+            this.buffer = chunk;
+
         callback();
+
+        this.bufferChangeCallback();
 
         return true;
     }

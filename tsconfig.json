@@ -8,6 +8,6 @@
     "esModuleInterop": true
   },
   "files": [
-    "src/index.ts"
+    "src/replace-printer.ts"
   ]
 }

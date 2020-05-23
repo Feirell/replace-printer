@@ -1,7 +1,7 @@
 {
   "name": "replace-printer",
-  "version": "0.0.1",
-  "main": "./lib/index.js",
+  "version": "1.0.0",
+  "main": "./lib/replace-printer.js",
   "files": "lib",
   "scripts": {
     "build": "tsc",
