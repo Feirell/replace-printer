@@ -1,12 +1,10 @@
 import WriteStream = NodeJS.WriteStream;
 import {Console} from "console";
 import {WriteStreamStringBuffer} from "./write-stream-string-buffer";
-import {CalibrateableThrottle} from "./calibrateable-throttle";
 import TTY from "tty";
 
 interface ReplacePrinterOptions {
     outStream?: WriteStream;
-    throttleTimeout?: number;
 }
 
 function removeProblematicCharacters(str: string) {
@@ -26,36 +24,26 @@ export class ReplacePrinter {
     private replaceStreamBuffer: WriteStreamStringBuffer;
     private continuesStreamBuffer: WriteStreamStringBuffer;
 
-    private readonly throttle: CalibrateableThrottle;
     private lastReplaceMessage?: string;
 
     constructor(options: ReplacePrinterOptions = {}) {
         const {
-            outStream = process.stdout,
-            throttleTimeout = 1000 / 16
+            outStream = process.stdout
         } = options;
 
         if (!(outStream as TTYWriteStream).isTTY)
             throw new Error('outstream needs to be a TTY stream');
 
-        this.throttle = new CalibrateableThrottle(() => {
-            this.pushBuffers();
-        }, throttleTimeout);
 
         this.outStream = outStream as TTYWriteStream;
 
-        const notice = () =>
-            this.throttle.changeNotice();
+        const notice = this.pushBuffers.bind(this);
 
         this.replaceStreamBuffer = new WriteStreamStringBuffer(this.outStream, notice, 'replace');
         this.continuesStreamBuffer = new WriteStreamStringBuffer(this.outStream, notice);
 
         this.replaceConsole = new Console(this.replaceStreamBuffer);
         this.continuesConsole = new Console(this.continuesStreamBuffer);
-    }
-
-    setThrottleTimeout(timeout: number) {
-        this.throttle.setTimout(timeout);
     }
 
     private getLineAndLastColumns(msg: string, columns?: number) {
@@ -84,7 +72,7 @@ export class ReplacePrinter {
 
         // will not print if columns is currently zero
         if (Number.isFinite(os.columns) && os.columns <= 0) {
-            this.throttle.changeNotice();
+            this.pushBuffers();
             return;
         }
 
