@@ -17,7 +17,7 @@ const doEveryTill = (every, till, action) => {
 }
 
 (async () => {
-    const rp1 = new ReplacePrinter({throttleTimeout: 0}).replaceConsole;
+    const rp1 = new ReplacePrinter().replaceConsole;
 
     rp1.log('This is a log of\na new line which is long');
     await waitMs(1000);

@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build-readme": "ifim README.md"
+    "build-readme": "ifim README.template.md --add-location-notice"
   },
   "repository": "https://github.com/Feirell/replace-printer.git",
   "author": "Florian Völker <Neirolf2030@web.de>",
