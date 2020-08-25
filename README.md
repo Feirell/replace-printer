@@ -10,7 +10,7 @@ This package provides you with an easy to use way to print and then replace the 
 
 To use the package you can use the ReplacePrinter class.
 
-<!-- USEFILE: test-it\test-01.js; str => str.replace('../', 'replace-printer') -->
+<!-- USEFILE: examples\test-01.js; str => str.replace('../', 'replace-printer') -->
 ``` js
 const {ReplacePrinter} = require('replace-printer');
 
@@ -40,7 +40,7 @@ const intervalId = setInterval(() => {
 ```
 *You can find this in `test-it\test-01.js`*
 
-<!-- USEFILE: test-it\test-02.js; str => str.replace('../', 'replace-printer') -->
+<!-- USEFILE: examples\test-02.js; str => str.replace('../', 'replace-printer') -->
 ``` js
 const {ReplacePrinter} = require('replace-printer');
 
@@ -59,7 +59,7 @@ setTimeout(() => {
 ```
 *You can find this in `test-it\test-02.js`*
 
-<!-- USEFILE: test-it\test-03.js; str => str.replace('../', 'replace-printer') -->
+<!-- USEFILE: examples\test-03.js; str => str.replace('../', 'replace-printer') -->
 ``` js
 const {ReplacePrinter} = require('replace-printer');
 
