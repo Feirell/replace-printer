@@ -38,7 +38,7 @@ const intervalId = setInterval(() => {
 
 
 ```
-*You can find this in `test-it\test-01.js`*
+*You can find this in `examples\test-01.js`*
 
 <!-- USEFILE: examples\test-02.js; str => str.replace('../', 'replace-printer') -->
 ``` js
@@ -57,7 +57,7 @@ setTimeout(() => {
     replaceConsole.log('Whoosh and the message was removed.');
 }, 5000);
 ```
-*You can find this in `test-it\test-02.js`*
+*You can find this in `examples\test-02.js`*
 
 <!-- USEFILE: examples\test-03.js; str => str.replace('../', 'replace-printer') -->
 ``` js
@@ -110,4 +110,4 @@ const doEveryTill = (every, till, action) => {
     process.exit(1)
 })
 ```
-*You can find this in `test-it\test-03.js`*
+*You can find this in `examples\test-03.js`*

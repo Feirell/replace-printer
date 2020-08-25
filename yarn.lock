@@ -12,10 +12,10 @@ chainable-error@^1.0.0:
   resolved "https://registry.yarnpkg.com/chainable-error/-/chainable-error-1.0.1.tgz#bd073ee0184e86ed85993eedf6975efe380c8e70"
   integrity sha512-vfKStDqOD1HeCCGrUyBVDg7sptuHjOwXG0e3CJQka/OyfYIEGaBCxYV+c9EqqZFVVnpOyrXiApM4m0feVPCcig==
 
-insert-filecontent-into-markdown@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/insert-filecontent-into-markdown/-/insert-filecontent-into-markdown-1.0.3.tgz#41953e4e976f06fe4ea379ecc6a774e1803e1174"
-  integrity sha512-sJt6DXi49vToByu3pdSH3Hka2UWuxCpAQtmIuDEeLonbrToH2k8yiMwV8n4LB39H2QhH7pFSJeSBSyt7NsDzrQ==
+insert-filecontent-into-markdown@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/insert-filecontent-into-markdown/-/insert-filecontent-into-markdown-2.0.0.tgz#69cb91e4bd9763ab4925d65f78df577b9c03fb60"
+  integrity sha512-gOjQUtav9FS/Eh2YhutEEcUQzaMI7X4VcrxQ6+XNVx0yJVxlkSctjK9NUYQ/OnhALQoGjtPscEw5whitMLLJUw==
   dependencies:
     chainable-error "^1.0.0"
     minimist "^1.2.0"
