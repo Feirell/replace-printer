@@ -1,6 +1,6 @@
 import {Console} from "console";
 import {WriteStreamStringBuffer} from "./write-stream-string-buffer";
-import TTY from "tty";
+import {WriteStream as OrigTTYWriteStream} from "tty";
 
 interface ReplacePrinterOptions {
     outStream?: TTYWriteStream;
@@ -34,7 +34,7 @@ function getLineCountAndLastLineLength(msg: string, columns?: number) {
     return {lineCount, lastLineLength};
 }
 
-type TTYWriteStream = TTY.WriteStream & { moveCursor: (dx: number, dy: number) => undefined };
+type TTYWriteStream = OrigTTYWriteStream & { moveCursor: (dx: number, dy: number) => undefined };
 
 export const isTTYStream = (ws: any): ws is TTYWriteStream => !!(ws as TTYWriteStream).isTTY
 
