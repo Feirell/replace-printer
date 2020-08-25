@@ -1,4 +1,3 @@
-import WriteStream = NodeJS.WriteStream;
 import {Console} from "console";
 import {WriteStreamStringBuffer} from "./write-stream-string-buffer";
 import TTY from "tty";
@@ -71,12 +70,6 @@ export class ReplacePrinter {
     private pushBuffers() {
         const os = this.outStream;
 
-        // will not print if columns is currently zero
-        if (Number.isFinite(os.columns) && os.columns <= 0) {
-            this.pushBuffers();
-            return;
-        }
-
         // since the buffer is written by a Console there is always a linebreak at the end
         // removing it to have it sit flush on the last line
         const clearedMessage = removeProblematicCharacters(this.replaceStreamBuffer.buffer.slice(0, -1));
@@ -91,6 +84,9 @@ export class ReplacePrinter {
         // clear the space the last replace message took
         if (this.lastReplaceMessage != undefined) {
             const measurements = getLineCountAndLastLineLength(this.lastReplaceMessage, os.columns);
+
+            // TODO try to remove flickering by concatenating the ASCII control characters which are used by
+            // the moveCursor and clearScreenDown commands
 
             // clearing last printed replaceable part
             os.moveCursor(-measurements.lastLineLength, -measurements.lineCount);
