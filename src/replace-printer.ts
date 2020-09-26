@@ -5,6 +5,7 @@ import {WriteStreamStringBuffer} from "./write-stream-string-buffer";
 
 interface ReplacePrinterOptions {
     outStream?: TTYWriteStream;
+    removeLastLinebreak?: boolean
 }
 
 function removeProblematicCharacters(str: string) {
@@ -46,6 +47,8 @@ export const isTTYStream = (ws: any): ws is TTYWriteStream => !!(ws as TTYWriteS
 
 const CSI = '\x1b[';
 
+let lastUsedReplacePrinter: ReplacePrinter | undefined = undefined;
+
 export class ReplacePrinter {
     public readonly replaceConsole: Console;
     public readonly continuesConsole: Console;
@@ -56,10 +59,13 @@ export class ReplacePrinter {
     private readonly continuesStreamBuffer: WriteStreamStringBuffer;
 
     private lastReplaceMessage?: string;
+    private readonly removeLastLineBreak: boolean;
 
     constructor({
-                    outStream = process.stdout as TTYWriteStream
+                    outStream = process.stdout as TTYWriteStream,
+                    removeLastLinebreak = true
                 }: ReplacePrinterOptions = {}) {
+        this.removeLastLineBreak = removeLastLinebreak;
 
         if (!isTTYStream(outStream))
             throw new Error('outStream needs to be a TTY stream');
@@ -73,21 +79,55 @@ export class ReplacePrinter {
 
         this.continuesStreamBuffer = new WriteStreamStringBuffer(this.outStream, notice, 'append');
         this.continuesConsole = new Console(this.continuesStreamBuffer);
+
+        // this.continuesStreamBuffer.buffer = '\n';
+    }
+
+    /**
+     * You need to call this function when you want to continue printing with another ReplacePrinter or resume using
+     * another logging utility. This function will just append a new line, if the last replace message did not end with
+     * one.
+     */
+    public endWithNewLine() {
+        const lrm = this.lastReplaceMessage;
+        if (lrm && !lrm.endsWith('\n')) {
+            this.outStream.write('\n');
+
+            // to allow the continues use of the replace printer
+            this.lastReplaceMessage += '\n';
+        }
     }
 
     private pushBuffers() {
+        // this will append another new line
+        if (lastUsedReplacePrinter != undefined && lastUsedReplacePrinter != this) {
+            lastUsedReplacePrinter.endWithNewLine();
+            lastUsedReplacePrinter = this;
+        }
+
+        lastUsedReplacePrinter = this;
+
         const os = this.outStream;
 
-        // since the buffer is written by a Console there is always a linebreak at the end
-        // removing it to have it sit flush on the last line
-        const clearedMessage = removeProblematicCharacters(this.replaceStreamBuffer.buffer.slice(0, -1));
-        const replaceBuffer = clearedMessage.length == 0 ? this.lastReplaceMessage : clearedMessage;
+        let rpb = this.replaceStreamBuffer.buffer;
+
         // clear buffer to remember that this message was already printed and is now cleaned in the lastReplaceMessage
         this.replaceStreamBuffer.buffer = '';
 
-        const continuesBuffer = this.continuesStreamBuffer.buffer;
+        // since the buffer is written by a Console there is always a linebreak at the end
+        // removing it to have it sit flush on the last line
+        if (this.removeLastLineBreak && rpb.endsWith('\n'))
+            rpb = rpb.slice(0, rpb.endsWith('\r\n') ? -2 : -1);
+
+        const clearedMessage = removeProblematicCharacters(rpb);
+        const replaceBuffer = clearedMessage.length == 0 ? this.lastReplaceMessage : clearedMessage;
+
+        let continuesBuffer = this.continuesStreamBuffer.buffer;
         // clear the buffer to not reprint the message since it is now already in the output buffer
         this.continuesStreamBuffer.buffer = '';
+
+        if (continuesBuffer.length > 0 && !continuesBuffer.endsWith('\n'))
+            continuesBuffer += '\n';
 
         let write = '';
 
@@ -95,14 +135,18 @@ export class ReplacePrinter {
         if (this.lastReplaceMessage != undefined) {
             const measurements = getLineCountAndLastLineLength(this.lastReplaceMessage, os.columns);
 
-            const moveCursorBack = CSI + '16';
-            const moveCursorXUp = CSI + (measurements.lineCount - 1) + 'F';
-            const clearScreenDown = CSI + '0J';
+            const rows = measurements.lineCount;
 
             // clearing last printed replaceable part
-            write += moveCursorBack;
-            write += moveCursorXUp;
-            write += clearScreenDown;
+
+            // move the cursor to the start of the line
+            write += CSI + '1G';
+
+            // move the cursor up lines
+            write += rows > 0 ? CSI + rows + 'F' : '';
+
+            // clear all characters following
+            write += CSI + '0J';
         }
 
         this.lastReplaceMessage = replaceBuffer;
