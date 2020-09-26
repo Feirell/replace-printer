@@ -59,6 +59,9 @@ setTimeout(() => {
 ```
 *You can find this in `examples\test-02.js`*
 
+If you want to use multiple ReplacePrinter or if you want to resume the usage of other logging utilities you need to call `endWithNewLine`.
+Otherwise you will append the same line as the last replace message was printed.
+
 <!-- USEFILE: examples\test-03.js; str => str.replace('../', 'replace-printer') -->
 ``` js
 const {ReplacePrinter} = require('replace-printer');
@@ -80,31 +83,33 @@ const doEveryTill = (every, till, action) => {
 }
 
 (async () => {
-    const rp1 = new ReplacePrinter().replaceConsole;
+    const rp1 = new ReplacePrinter();
+    const rc1 = rp1.replaceConsole;
 
-    rp1.log('This is a log of\na new line which is long');
-    await waitMs(1000);
-    rp1.log('This is another line\nwhich is broken into two\n');
-    await waitMs(1000);
+    rc1.log('This is a log of\na new line which is long');
+    await waitMs(2500);
+    rc1.log('This is another line\nwhich is broken into two');
+    await waitMs(2000);
 
-    const replaceprinter2 = new ReplacePrinter();
-    const rp2 = replaceprinter2.replaceConsole;
-    const cp2 = replaceprinter2.continuesConsole;
+    // Warning: Never mix two ReplacePrinter, this will result in unexpected behavior!
+    // You should call endWithNewLine when you are done printing with the ReplacePrinter and want to print something else
+    rp1.endWithNewLine();
+
+    const rp2 = new ReplacePrinter();
+    const rc2 = rp2.replaceConsole;
+    const cc2 = rp2.continuesConsole;
 
     let framesPrinted = 0;
     await doEveryTill(5, 4000, (isLast) => {
         framesPrinted++;
         const frameString = '[' + framesPrinted.toString().padStart(4, '0') + ']';
         if (isLast)
-            rp2.log(frameString + ' this is the last log\n\n')
+            rc2.log(frameString + ' This is the last log')
         else
-            rp2.log(frameString + ' Another line which is not mean\nto be broken up into multiple ' + Date());
+            rc2.log(frameString + ' Another line which is meant\nto be broken up into multiple ' + Date());
     })
 
-    cp2.log('framesPrinted', framesPrinted);
-
-    // await waitMs(1000);
-    rp2.log('A final line which needs to be broken up since this is a test');
+    cc2.log('framesPrinted', framesPrinted);
 })().catch(err => {
     console.error(err);
     process.exit(1)

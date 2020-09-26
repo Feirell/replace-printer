@@ -14,4 +14,7 @@ To use the package you can use the ReplacePrinter class.
 
 <!-- USEFILE: examples\test-02.js; str => str.replace('../', 'replace-printer') -->
 
+If you want to use multiple ReplacePrinter or if you want to resume the usage of other logging utilities you need to call `endWithNewLine`.
+Otherwise you will append the same line as the last replace message was printed.
+
 <!-- USEFILE: examples\test-03.js; str => str.replace('../', 'replace-printer') -->
