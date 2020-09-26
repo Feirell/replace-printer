@@ -1,6 +1,6 @@
 {
   "name": "replace-printer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "lib/replace-printer.js",
   "types": "lib/replace-printer.d.ts",
   "files": [
