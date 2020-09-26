@@ -1,15 +1,22 @@
-import WriteStream = NodeJS.WriteStream;
 import {Console} from "console";
+import {WriteStream as TTYWriteStream} from "tty";
+
 import {WriteStreamStringBuffer} from "./write-stream-string-buffer";
-import TTY from "tty";
 
 interface ReplacePrinterOptions {
     outStream?: TTYWriteStream;
 }
 
 function removeProblematicCharacters(str: string) {
-    // this is a bit cheesy and won't work for the ALL cases, it should be extended
-    // TODO think about a better solution
+    // TODO make this function obsolete
+
+    // This function is used to remove characters which interfere with the character line length count
+    // to estimate when the terminal will break the line by itself. This number is needed to correctly move the cursor
+    // to replace the old replace message.
+
+    // A workaround could be to use the save ASCII Escape sequence, to just get back to the actual start
+    // of the replace message: <ESC> 7 (DECSC, save cursor position), <ESC> 8 (DECRC, restore curos).
+
     return str.replace(/\t/g, '    ');
 }
 
@@ -35,9 +42,10 @@ function getLineCountAndLastLineLength(msg: string, columns?: number) {
     return {lineCount, lastLineLength};
 }
 
-type TTYWriteStream = TTY.WriteStream & { moveCursor: (dx: number, dy: number) => undefined };
 
 export const isTTYStream = (ws: any): ws is TTYWriteStream => !!(ws as TTYWriteStream).isTTY
+
+const CSI = '\x1b[';
 
 export class ReplacePrinter {
     public readonly replaceConsole: Console;
@@ -88,18 +96,28 @@ export class ReplacePrinter {
         // clear the buffer to not reprint the message since it is now already in the output buffer
         this.continuesStreamBuffer.buffer = '';
 
+        let write = '';
+
         // clear the space the last replace message took
         if (this.lastReplaceMessage != undefined) {
             const measurements = getLineCountAndLastLineLength(this.lastReplaceMessage, os.columns);
 
+            const moveCursorBack = CSI + '16';
+            const moveCursorXUp = CSI + (measurements.lineCount - 1) + 'F';
+            const clearScreenDown = CSI + '0J';
+
             // clearing last printed replaceable part
-            os.moveCursor(-measurements.lastLineLength, -measurements.lineCount);
-            os.clearScreenDown();
+            write += moveCursorBack;
+            write += moveCursorXUp;
+            write += clearScreenDown;
         }
 
         this.lastReplaceMessage = replaceBuffer;
 
+        write += continuesBuffer;
+        write += replaceBuffer;
+
         // printing static and replaceable console output
-        os.write(continuesBuffer + replaceBuffer);
+        os.write(write);
     }
 }
