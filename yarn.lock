@@ -3,9 +3,9 @@
 
 
 "@types/node@^12.0.7":
-  version "12.0.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.7.tgz#4f2563bad652b2acb1722d7e7aae2b0ff62d192c"
-  integrity sha512-1YKeT4JitGgE4SOzyB9eMwO0nGVNkNEsm9qlIt1Lqm/tG2QEiSMTD4kS3aO6L+w5SClLVxALmIBESK6Mk5wX0A==
+  version "12.12.64"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.64.tgz#e3b336dc4c6ba52c6b59e3bd69a100347c20b1c0"
+  integrity sha512-UV1/ZJMC+HcP902wWdpC43cAcGu0IQk/I5bXjP2aSuCjsk3cE74mDvFrLKga7oDC170ugOAYBwfT4DSQW3akDA==
 
 chainable-error@^1.0.0:
   version "1.0.1"
@@ -13,19 +13,19 @@ chainable-error@^1.0.0:
   integrity sha512-vfKStDqOD1HeCCGrUyBVDg7sptuHjOwXG0e3CJQka/OyfYIEGaBCxYV+c9EqqZFVVnpOyrXiApM4m0feVPCcig==
 
 insert-filecontent-into-markdown@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/insert-filecontent-into-markdown/-/insert-filecontent-into-markdown-2.0.0.tgz#69cb91e4bd9763ab4925d65f78df577b9c03fb60"
-  integrity sha512-gOjQUtav9FS/Eh2YhutEEcUQzaMI7X4VcrxQ6+XNVx0yJVxlkSctjK9NUYQ/OnhALQoGjtPscEw5whitMLLJUw==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/insert-filecontent-into-markdown/-/insert-filecontent-into-markdown-2.0.1.tgz#57dda39c382d6518976f2a0e4d551c2486aee0f5"
+  integrity sha512-hAzYQMgqWjMwpwdHkUDbBl4uYujCp9yjlP/D0HTAueTx6IgBCU+ZWW+BDJpRoIFLgdmiLN+4dvPHVciac80o9w==
   dependencies:
     chainable-error "^1.0.0"
     minimist "^1.2.0"
 
 minimist@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
-  integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
-typescript@^3.9.2:
-  version "3.9.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.2.tgz#64e9c8e9be6ea583c54607677dd4680a1cf35db9"
-  integrity sha512-q2ktq4n/uLuNNShyayit+DTobV2ApPEo/6so68JaD5ojvc/6GClBipedB9zNWYxRSAlZXAe405Rlijzl6qDiSw==
+typescript@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.3.tgz#153bbd468ef07725c1df9c77e8b453f8d36abba5"
+  integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
